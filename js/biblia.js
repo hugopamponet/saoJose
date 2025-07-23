@@ -1,23 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
-    fetch('salmos/salmo1.html')
+function carregarSalmo(numero) {
+    fetch(`salmos/salmo${numero}.html`)
         .then(response => response.text())
         .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const divSalmo = doc.querySelector('#conteudoParaBiblia'); // apenas a div específica
-            const divLateral = doc.querySelector('#lateralD')
+
+            const divSalmo = doc.querySelector('#conteudoParaBiblia');
+            const divLateral = doc.querySelector('#lateralD');
 
             if (divSalmo) {
                 const mainBiblia = document.getElementById('conteudo');
-                mainBiblia.innerHTML = divSalmo.innerHTML; // insere só o conteúdo interno da div
-                const mainLateral = document.getElementById('teste')
+                mainBiblia.innerHTML = divSalmo.innerHTML;
+            }
+
+            if (divLateral) {
+                const mainLateral = document.getElementById('lateralD');
                 mainLateral.innerHTML = divLateral.innerHTML;
-            } else {
-                console.error("A div #conteudoSalmo não foi encontrada em salmo.html");
             }
         })
         .catch(error => {
-            console.error("Erro ao carregar salmo.html:", error);
+            console.error("Erro ao carregar salmo:", error);
+            document.getElementById('conteudo').innerHTML = "<p>Erro ao carregar o salmo.</p>";
         });
+}
 
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    carregarSalmo(1);
+});
